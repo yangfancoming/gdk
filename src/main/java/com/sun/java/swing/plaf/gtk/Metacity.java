@@ -1157,8 +1157,8 @@ class Metacity implements SynthConstants {
             direction = ArrowType.RIGHT;
         }
 
-        GTKPainter.INSTANCE.paintMetacityElement(context, g, state,
-                "metacity-arrow", x, y, w, h, shadowType, direction);
+//        GTKPainter.INSTANCE.paintMetacityElement(context, g, state,
+//                "metacity-arrow", x, y, w, h, shadowType, direction);
     }
 
     protected void drawGTKBox(Node node, Graphics g) {
@@ -1193,8 +1193,8 @@ class Metacity implements SynthConstants {
         } else if ("none".equals(shadow)) {
             shadowType = ShadowType.NONE;
         }
-        GTKPainter.INSTANCE.paintMetacityElement(context, g, state,
-                "metacity-box", x, y, w, h, shadowType, null);
+//        GTKPainter.INSTANCE.paintMetacityElement(context, g, state,
+//                "metacity-box", x, y, w, h, shadowType, null);
     }
 
     protected void drawGTKVLine(Node node, Graphics g) {
@@ -1216,8 +1216,8 @@ class Metacity implements SynthConstants {
             state = MOUSE_OVER;
         }
 
-        GTKPainter.INSTANCE.paintMetacityElement(context, g, state,
-                "metacity-vline", x, y1, 1, y2 - y1, null, null);
+//        GTKPainter.INSTANCE.paintMetacityElement(context, g, state,
+//                "metacity-vline", x, y1, 1, y2 - y1, null, null);
     }
 
     protected void drawGradient(Node node, Graphics g) {
@@ -1752,7 +1752,7 @@ class Metacity implements SynthConstants {
                         type = GTKColorType.LIGHT;
                     }
                     if (state >= 0 && type != null) {
-                        c = ((GTKStyle)context.getStyle()).getGTKColor(context, state, type);
+//                        c = ((GTKStyle)context.getStyle()).getGTKColor(context, state, type);
                     }
                 }
             }

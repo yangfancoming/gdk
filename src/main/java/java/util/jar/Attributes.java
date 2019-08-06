@@ -25,18 +25,12 @@
 
 package java.util.jar;
 
-import java.io.DataInputStream;
+import sun.misc.ASCIICaseInsensitiveComparator;
+import sun.util.logging.PlatformLogger;
+
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.Collection;
-import java.util.AbstractSet;
-import java.util.Iterator;
-import sun.util.logging.PlatformLogger;
-import java.util.Comparator;
-import sun.misc.ASCIICaseInsensitiveComparator;
+import java.util.*;
 
 /**
  * The Attributes class maps Manifest attribute names to associated string
