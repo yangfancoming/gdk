@@ -233,8 +233,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
      * @exception ClassNotFoundException if the class cannot be located
      */
     @CallerSensitive
-    public static Class<?> forName(String className)
-                throws ClassNotFoundException {
+    public static Class<?> forName(String className)  throws ClassNotFoundException {
         Class<?> caller = Reflection.getCallerClass();
         return forName0(className, true, ClassLoader.getClassLoader(caller), caller);
     }
@@ -294,18 +293,14 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
      * @exception LinkageError if the linkage fails
      * @exception ExceptionInInitializerError if the initialization provoked
      *            by this method fails
-     * @exception ClassNotFoundException if the class cannot be located by
-     *            the specified class loader
+     * @exception ClassNotFoundException if the class cannot be located by the specified class loader
      *
      * @see       java.lang.Class#forName(String)
      * @see       java.lang.ClassLoader
      * @since     1.2
      */
     @CallerSensitive
-    public static Class<?> forName(String name, boolean initialize,
-                                   ClassLoader loader)
-        throws ClassNotFoundException
-    {
+    public static Class<?> forName(String name, boolean initialize, ClassLoader loader)  throws ClassNotFoundException{
         Class<?> caller = null;
         SecurityManager sm = System.getSecurityManager();
         if (sm != null) {
@@ -315,8 +310,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
             if (sun.misc.VM.isSystemDomainLoader(loader)) {
                 ClassLoader ccl = ClassLoader.getClassLoader(caller);
                 if (!sun.misc.VM.isSystemDomainLoader(ccl)) {
-                    sm.checkPermission(
-                        SecurityConstants.GET_CLASSLOADER_PERMISSION);
+                    sm.checkPermission( SecurityConstants.GET_CLASSLOADER_PERMISSION);
                 }
             }
         }
@@ -324,11 +318,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
     }
 
     /** Called after security check for system loader access checks have been made. */
-    private static native Class<?> forName0(String name, boolean initialize,
-                                            ClassLoader loader,
-                                            Class<?> caller)
-        throws ClassNotFoundException;
-
+    private static native Class<?> forName0(String name, boolean initialize,ClassLoader loader,Class<?> caller) throws ClassNotFoundException;
     /**
      * Creates a new instance of the class represented by this {@code Class}
      * object.  The class is instantiated as if by a {@code new}
@@ -365,9 +355,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
      *          of this class.
      */
     @CallerSensitive
-    public T newInstance()
-        throws InstantiationException, IllegalAccessException
-    {
+    public T newInstance()  throws InstantiationException, IllegalAccessException {
         if (System.getSecurityManager() != null) {
             checkMemberAccess(Member.PUBLIC, Reflection.getCallerClass(), false);
         }
@@ -378,9 +366,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
         // Constructor lookup
         if (cachedConstructor == null) {
             if (this == Class.class) {
-                throw new IllegalAccessException(
-                    "Can not call newInstance() on the Class for java.lang.Class"
-                );
+                throw new IllegalAccessException( "Can not call newInstance() on the Class for java.lang.Class" );
             }
             try {
                 Class<?>[] empty = {};
@@ -389,17 +375,13 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
                 // since we have to do the security check here anyway
                 // (the stack depth is wrong for the Constructor's
                 // security check to work)
-                java.security.AccessController.doPrivileged(
-                    new java.security.PrivilegedAction<Void>() {
-                        public Void run() {
-                                c.setAccessible(true);
-                                return null;
-                            }
-                        });
+                java.security.AccessController.doPrivileged((PrivilegedAction<Void>) ()->{
+                        c.setAccessible(true);
+                        return null;
+                    });
                 cachedConstructor = c;
             } catch (NoSuchMethodException e) {
-                throw (InstantiationException)
-                    new InstantiationException(getName()).initCause(e);
+                throw (InstantiationException)  new InstantiationException(getName()).initCause(e);
             }
         }
         Constructor<T> tmpConstructor = cachedConstructor;
@@ -995,8 +977,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
             if (!enclosingInfo.isMethod())
                 return null;
 
-            MethodRepository typeInfo = MethodRepository.make(enclosingInfo.getDescriptor(),
-                                                              getFactory());
+            MethodRepository typeInfo = MethodRepository.make(enclosingInfo.getDescriptor(), getFactory());
             Class<?>   returnType       = toClass(typeInfo.getReturnType());
             Type []    parameterTypes   = typeInfo.getParameterTypes();
             Class<?>[] parameterClasses = new Class<?>[parameterTypes.length];
@@ -1098,9 +1079,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
 
     private static Class<?> toClass(Type o) {
         if (o instanceof GenericArrayType)
-            return Array.newInstance(toClass(((GenericArrayType)o).getGenericComponentType()),
-                                     0)
-                .getClass();
+            return Array.newInstance(toClass(((GenericArrayType)o).getGenericComponentType()),0).getClass();
         return (Class<?>)o;
      }
 
@@ -1141,7 +1120,6 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
     @CallerSensitive
     public Constructor<?> getEnclosingConstructor() throws SecurityException {
         EnclosingMethodInfo enclosingInfo = getEnclosingMethodInfo();
-
         if (enclosingInfo == null)
             return null;
         else {
@@ -1161,8 +1139,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
 
             // Perform access check
             Class<?> enclosingCandidate = enclosingInfo.getEnclosingClass();
-            enclosingCandidate.checkMemberAccess(Member.DECLARED,
-                                                 Reflection.getCallerClass(), true);
+            enclosingCandidate.checkMemberAccess(Member.DECLARED,Reflection.getCallerClass(), true);
             /*
              * Loop over all declared constructors; match number
              * of and type of parameters.
@@ -1182,7 +1159,6 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
                         return c;
                 }
             }
-
             throw new InternalError("Enclosing constructor not found");
         }
     }
@@ -1208,10 +1184,8 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
     @CallerSensitive
     public Class<?> getDeclaringClass() throws SecurityException {
         final Class<?> candidate = getDeclaringClass0();
-
         if (candidate != null)
-            candidate.checkPackageAccess(
-                    ClassLoader.getClassLoader(Reflection.getCallerClass()), true);
+            candidate.checkPackageAccess( ClassLoader.getClassLoader(Reflection.getCallerClass()), true);
         return candidate;
     }
 
@@ -1260,8 +1234,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
         }
 
         if (enclosingCandidate != null)
-            enclosingCandidate.checkPackageAccess(
-                    ClassLoader.getClassLoader(Reflection.getCallerClass()), true);
+            enclosingCandidate.checkPackageAccess( ClassLoader.getClassLoader(Reflection.getCallerClass()), true);
         return enclosingCandidate;
     }
 
@@ -1470,23 +1443,20 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
         // out anything other than public members and (2) public member access
         // has already been ok'd by the SecurityManager.
 
-        return java.security.AccessController.doPrivileged(
-            new java.security.PrivilegedAction<Class<?>[]>() {
-                public Class<?>[] run() {
-                    List<Class<?>> list = new ArrayList<>();
-                    Class<?> currentClass = Class.this;
-                    while (currentClass != null) {
-                        Class<?>[] members = currentClass.getDeclaredClasses();
-                        for (int i = 0; i < members.length; i++) {
-                            if (Modifier.isPublic(members[i].getModifiers())) {
-                                list.add(members[i]);
-                            }
-                        }
-                        currentClass = currentClass.getSuperclass();
+        return java.security.AccessController.doPrivileged((PrivilegedAction<Class<?>[]>) ()->{
+            List<Class<?>> list = new ArrayList<>();
+            Class<?> currentClass = Class.this;
+            while (currentClass != null) {
+                Class<?>[] members = currentClass.getDeclaredClasses();
+                for (int i = 0; i < members.length; i++) {
+                    if (Modifier.isPublic(members[i].getModifiers())) {
+                        list.add(members[i]);
                     }
-                    return list.toArray(new Class<?>[0]);
                 }
-            });
+                currentClass = currentClass.getSuperclass();
+            }
+            return list.toArray(new Class<?>[0]);
+        });
     }
 
 
@@ -1964,8 +1934,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
      * @return  the array of {@code Constructor} objects representing all the
      *          declared constructors of this class
      * @throws  SecurityException
-     *          If a security manager, <i>s</i>, is present and any of the
-     *          following conditions is met:
+     *          If a security manager, <i>s</i>, is present and any of the  following conditions is met:
      *
      *          <ul>
      *
@@ -1981,7 +1950,6 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
      *          invocation of {@link SecurityManager#checkPackageAccess
      *          s.checkPackageAccess()} denies access to the package
      *          of this class
-     *
      *          </ul>
      *
      * @since JDK1.1
@@ -3043,13 +3011,10 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
         return null;
     }
 
-    private Constructor<T> getConstructor0(Class<?>[] parameterTypes,
-                                        int which) throws NoSuchMethodException
-    {
+    private Constructor<T> getConstructor0(Class<?>[] parameterTypes, int which) throws NoSuchMethodException {
         Constructor<T>[] constructors = privateGetDeclaredConstructors((which == Member.PUBLIC));
         for (Constructor<T> constructor : constructors) {
-            if (arrayContentsEq(parameterTypes,
-                                constructor.getParameterTypes())) {
+            if (arrayContentsEq(parameterTypes,constructor.getParameterTypes())) {
                 return getReflectionFactory().copyConstructor(constructor);
             }
         }
@@ -3150,9 +3115,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
      *
      * @see java.io.ObjectStreamClass
      */
-    private static final ObjectStreamField[] serialPersistentFields =
-        new ObjectStreamField[0];
-
+    private static final ObjectStreamField[] serialPersistentFields =  new ObjectStreamField[0];
 
     /**
      * Returns the assertion status that would be assigned to this
@@ -3228,33 +3191,31 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
     private static boolean initted = false;
     private static void checkInitted() {
         if (initted) return;
-        AccessController.doPrivileged(new PrivilegedAction<Void>() {
-                public Void run() {
-                    // Tests to ensure the system properties table is fully
-                    // initialized. This is needed because reflection code is
-                    // called very early in the initialization process (before
-                    // command-line arguments have been parsed and therefore
-                    // these user-settable properties installed.) We assume that
-                    // if System.out is non-null then the System class has been
-                    // fully initialized and that the bulk of the startup code
-                    // has been run.
+        AccessController.doPrivileged((PrivilegedAction<Void>) ()->{
+            // Tests to ensure the system properties table is fully
+            // initialized. This is needed because reflection code is
+            // called very early in the initialization process (before
+            // command-line arguments have been parsed and therefore
+            // these user-settable properties installed.) We assume that
+            // if System.out is non-null then the System class has been
+            // fully initialized and that the bulk of the startup code
+            // has been run.
 
-                    if (System.out == null) {
-                        // java.lang.System not yet fully initialized
-                        return null;
-                    }
+            if (System.out == null) {
+                // java.lang.System not yet fully initialized
+                return null;
+            }
 
-                    // Doesn't use Boolean.getBoolean to avoid class init.
-                    String val =
-                        System.getProperty("sun.reflect.noCaches");
-                    if (val != null && val.equals("true")) {
-                        useCaches = false;
-                    }
+            // Doesn't use Boolean.getBoolean to avoid class init.
+            String val =
+                System.getProperty("sun.reflect.noCaches");
+            if (val != null && val.equals("true")) {
+                useCaches = false;
+            }
 
-                    initted = true;
-                    return null;
-                }
-            });
+            initted = true;
+            return null;
+        });
     }
 
     /**
@@ -3283,13 +3244,10 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
             if (!isEnum()) return null;
             try {
                 final Method values = getMethod("values");
-                java.security.AccessController.doPrivileged(
-                    new java.security.PrivilegedAction<Void>() {
-                        public Void run() {
-                                values.setAccessible(true);
-                                return null;
-                            }
-                        });
+                java.security.AccessController.doPrivileged((PrivilegedAction<Void>) ()->{
+                        values.setAccessible(true);
+                        return null;
+                    });
                 @SuppressWarnings("unchecked")
                 T[] temporaryConstants = (T[])values.invoke(null);
                 enumConstants = temporaryConstants;
@@ -3385,7 +3343,6 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
     @SuppressWarnings("unchecked")
     public <A extends Annotation> A getAnnotation(Class<A> annotationClass) {
         Objects.requireNonNull(annotationClass);
-
         return (A) annotationData().annotations.get(annotationClass);
     }
 
@@ -3406,11 +3363,8 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
     @Override
     public <A extends Annotation> A[] getAnnotationsByType(Class<A> annotationClass) {
         Objects.requireNonNull(annotationClass);
-
         AnnotationData annotationData = annotationData();
-        return AnnotationSupport.getAssociatedAnnotations(annotationData.declaredAnnotations,
-                                                          this,
-                                                          annotationClass);
+        return AnnotationSupport.getAssociatedAnnotations(annotationData.declaredAnnotations,this,annotationClass);
     }
 
     /**
@@ -3439,9 +3393,7 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
     @Override
     public <A extends Annotation> A[] getDeclaredAnnotationsByType(Class<A> annotationClass) {
         Objects.requireNonNull(annotationClass);
-
-        return AnnotationSupport.getDirectlyAndIndirectlyPresent(annotationData().declaredAnnotations,
-                                                                 annotationClass);
+        return AnnotationSupport.getDirectlyAndIndirectlyPresent(annotationData().declaredAnnotations,annotationClass);
     }
 
     /**
@@ -3491,22 +3443,16 @@ public final class Class<T> implements java.io.Serializable, GenericDeclaration,
     }
 
     private AnnotationData createAnnotationData(int classRedefinedCount) {
-        Map<Class<? extends Annotation>, Annotation> declaredAnnotations =
-            AnnotationParser.parseAnnotations(getRawAnnotations(), getConstantPool(), this);
+        Map<Class<? extends Annotation>, Annotation> declaredAnnotations =  AnnotationParser.parseAnnotations(getRawAnnotations(), getConstantPool(), this);
         Class<?> superClass = getSuperclass();
         Map<Class<? extends Annotation>, Annotation> annotations = null;
         if (superClass != null) {
-            Map<Class<? extends Annotation>, Annotation> superAnnotations =
-                superClass.annotationData().annotations;
+            Map<Class<? extends Annotation>, Annotation> superAnnotations = superClass.annotationData().annotations;
             for (Map.Entry<Class<? extends Annotation>, Annotation> e : superAnnotations.entrySet()) {
                 Class<? extends Annotation> annotationClass = e.getKey();
                 if (AnnotationType.getInstance(annotationClass).isInherited()) {
                     if (annotations == null) { // lazy construction
-                        annotations = new LinkedHashMap<>((Math.max(
-                                declaredAnnotations.size(),
-                                Math.min(12, declaredAnnotations.size() + superAnnotations.size())
-                            ) * 4 + 2) / 3
-                        );
+                        annotations = new LinkedHashMap<>((Math.max(declaredAnnotations.size(), Math.min(12, declaredAnnotations.size() + superAnnotations.size()) ) * 4 + 2) / 3 );
                     }
                     annotations.put(annotationClass, e.getValue());
                 }
