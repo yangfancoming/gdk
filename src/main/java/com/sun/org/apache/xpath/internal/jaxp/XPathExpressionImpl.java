@@ -1,53 +1,26 @@
-/*
- * Copyright (c) 2007, 2015, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- */
-/*
- * Copyright 1999-2004 The Apache Software Foundation.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+
 // $Id: XPathExpressionImpl.java,v 1.3 2005/09/27 09:40:43 sunithareddy Exp $
 
 package com.sun.org.apache.xpath.internal.jaxp;
 
-import com.sun.org.apache.xpath.internal.*;
-import javax.xml.transform.TransformerException;
-
-import com.sun.org.apache.xpath.internal.objects.XObject;
-import com.sun.org.apache.xml.internal.dtm.DTM;
-import com.sun.org.apache.xml.internal.utils.PrefixResolver;
-import com.sun.org.apache.xpath.internal.res.XPATHErrorResources;
 import com.sun.org.apache.xalan.internal.res.XSLMessages;
 import com.sun.org.apache.xalan.internal.utils.FactoryImpl;
 import com.sun.org.apache.xalan.internal.utils.FeatureManager;
+import com.sun.org.apache.xml.internal.dtm.DTM;
+import com.sun.org.apache.xpath.internal.objects.XObject;
+import com.sun.org.apache.xpath.internal.res.XPATHErrorResources;
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
+import org.w3c.dom.traversal.NodeIterator;
+import org.xml.sax.InputSource;
 
-import javax.xml.namespace.NamespaceContext;
 import javax.xml.namespace.QName;
-import javax.xml.xpath.XPathExpressionException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFunctionResolver;
 import javax.xml.xpath.XPathVariableResolver;
-import javax.xml.xpath.XPathConstants;
-
-import org.w3c.dom.Node;
-import org.w3c.dom.Document;
-import org.w3c.dom.DOMImplementation;
-import org.w3c.dom.traversal.NodeIterator;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-
-import org.xml.sax.InputSource;
 
 /**
  * The XPathExpression interface encapsulates a (compiled) XPath expression.
@@ -104,25 +77,22 @@ public class XPathExpressionImpl  implements javax.xml.xpath.XPathExpression{
         this.xpath = xpath;
     }
 
-    public Object eval(Object item, QName returnType)
-            throws javax.xml.transform.TransformerException {
+    public Object eval(Object item, QName returnType) throws javax.xml.transform.TransformerException {
         XObject resultObject = eval ( item );
         return getResultAsType( resultObject, returnType );
     }
 
-    private XObject eval ( Object contextItem )
-            throws javax.xml.transform.TransformerException {
-        com.sun.org.apache.xpath.internal.XPathContext xpathSupport = null;
+    private XObject eval ( Object contextItem )  throws javax.xml.transform.TransformerException {
+        com.sun.org.apache.xpath.internal.XPathContext xpathSupport;
         if ( functionResolver != null ) {
-            JAXPExtensionsProvider jep = new JAXPExtensionsProvider(
-                    functionResolver, featureSecureProcessing, featureManager );
+            JAXPExtensionsProvider jep = new JAXPExtensionsProvider( functionResolver, featureSecureProcessing, featureManager );
             xpathSupport = new com.sun.org.apache.xpath.internal.XPathContext( jep );
         } else {
             xpathSupport = new com.sun.org.apache.xpath.internal.XPathContext();
         }
 
         xpathSupport.setVarStack(new JAXPVariableStack(variableResolver));
-        XObject xobj = null;
+        XObject xobj;
 
         Node contextNode = (Node)contextItem;
         // We always need to have a ContextNode with Xalan XPath implementation
@@ -174,17 +144,13 @@ public class XPathExpressionImpl  implements javax.xml.xpath.XPathExpression{
         //Validating parameters to enforce constraints defined by JAXP spec
         if ( returnType == null ) {
            //Throwing NullPointerException as defined in spec
-            String fmsg = XSLMessages.createXPATHMessage(
-                    XPATHErrorResources.ER_ARG_CANNOT_BE_NULL,
-                    new Object[] {"returnType"} );
+            String fmsg = XSLMessages.createXPATHMessage(XPATHErrorResources.ER_ARG_CANNOT_BE_NULL,new Object[] {"returnType"} );
             throw new NullPointerException( fmsg );
         }
         // Checking if requested returnType is supported. returnType need to be
         // defined in XPathConstants
         if ( !isSupported ( returnType ) ) {
-            String fmsg = XSLMessages.createXPATHMessage(
-                    XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE,
-                    new Object[] { returnType.toString() } );
+            String fmsg = XSLMessages.createXPATHMessage( XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE,new Object[] { returnType.toString() } );
             throw new IllegalArgumentException ( fmsg );
         }
         try {
@@ -279,17 +245,13 @@ public class XPathExpressionImpl  implements javax.xml.xpath.XPathExpression{
     public Object evaluate(InputSource source, QName returnType)
         throws XPathExpressionException {
         if ( ( source == null ) || ( returnType == null ) ) {
-            String fmsg = XSLMessages.createXPATHMessage(
-                    XPATHErrorResources.ER_SOURCE_RETURN_TYPE_CANNOT_BE_NULL,
-                    null );
+            String fmsg = XSLMessages.createXPATHMessage(XPATHErrorResources.ER_SOURCE_RETURN_TYPE_CANNOT_BE_NULL,null );
             throw new NullPointerException ( fmsg );
         }
         // Checking if requested returnType is supported. returnType need to be
         // defined in XPathConstants
         if ( !isSupported ( returnType ) ) {
-            String fmsg = XSLMessages.createXPATHMessage(
-                    XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE,
-                    new Object[] { returnType.toString() } );
+            String fmsg = XSLMessages.createXPATHMessage( XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE, new Object[] { returnType.toString() } );
             throw new IllegalArgumentException ( fmsg );
         }
         try {
@@ -345,8 +307,7 @@ public class XPathExpressionImpl  implements javax.xml.xpath.XPathExpression{
         return false;
      }
 
-     private Object getResultAsType( XObject resultObject, QName returnType )
-        throws javax.xml.transform.TransformerException {
+     private Object getResultAsType( XObject resultObject, QName returnType )  throws javax.xml.transform.TransformerException {
         // XPathConstants.STRING
         if ( returnType.equals( XPathConstants.STRING ) ) {
             return resultObject.str();
@@ -371,9 +332,7 @@ public class XPathExpressionImpl  implements javax.xml.xpath.XPathExpression{
         }
         // If isSupported check is already done then the execution path
         // shouldn't come here. Being defensive
-        String fmsg = XSLMessages.createXPATHMessage(
-                XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE,
-                new Object[] { returnType.toString()});
+        String fmsg = XSLMessages.createXPATHMessage( XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE, new Object[] { returnType.toString()});
         throw new IllegalArgumentException ( fmsg );
     }
 

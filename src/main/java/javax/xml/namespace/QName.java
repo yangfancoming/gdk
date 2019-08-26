@@ -1,27 +1,4 @@
-/*
- * Copyright (c) 2003, 2006, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+
 
 package javax.xml.namespace;
 
@@ -107,13 +84,7 @@ public class QName implements Serializable {
     static {
         try {
             // use a privileged block as reading a system property
-            String valueUseCompatibleSerialVersionUID = (String) AccessController.doPrivileged(
-                    new PrivilegedAction() {
-                        public Object run() {
-                            return System.getProperty("com.sun.xml.namespace.QName.useCompatibleSerialVersionUID");
-                        }
-                    }
-            );
+            String valueUseCompatibleSerialVersionUID = (String) AccessController.doPrivileged((PrivilegedAction) ()->System.getProperty("com.sun.xml.namespace.QName.useCompatibleSerialVersionUID"));
             useDefaultSerialVersionUID = (valueUseCompatibleSerialVersionUID != null && valueUseCompatibleSerialVersionUID.equals("1.0")) ? false : true;
         } catch (Exception exception) {
             // use default if any Exceptions
@@ -241,15 +212,13 @@ public class QName implements Serializable {
         // local part is required.
         // "" is allowed to preserve compatibility with QName 1.0
         if (localPart == null) {
-            throw new IllegalArgumentException(
-                    "local part cannot be \"null\" when creating a QName");
+            throw new IllegalArgumentException( "local part cannot be \"null\" when creating a QName");
         }
         this.localPart = localPart;
 
         // prefix is required
         if (prefix == null) {
-            throw new IllegalArgumentException(
-                    "prefix cannot be \"null\" when creating a QName");
+            throw new IllegalArgumentException( "prefix cannot be \"null\" when creating a QName");
         }
         this.prefix = prefix;
     }
@@ -294,10 +263,7 @@ public class QName implements Serializable {
      * prefix)
      */
     public QName(String localPart) {
-        this(
-            XMLConstants.NULL_NS_URI,
-            localPart,
-            XMLConstants.DEFAULT_NS_PREFIX);
+        this(XMLConstants.NULL_NS_URI, localPart,XMLConstants.DEFAULT_NS_PREFIX);
     }
 
     /**
@@ -359,15 +325,11 @@ public class QName implements Serializable {
         if (objectToTest == this) {
             return true;
         }
-
         if (objectToTest == null || !(objectToTest instanceof QName)) {
             return false;
         }
-
         QName qName = (QName) objectToTest;
-
-        return localPart.equals(qName.localPart)
-            && namespaceURI.equals(qName.namespaceURI);
+        return localPart.equals(qName.localPart) && namespaceURI.equals(qName.namespaceURI);
     }
 
     /**
@@ -468,24 +430,17 @@ public class QName implements Serializable {
 
         // null is not valid
         if (qNameAsString == null) {
-            throw new IllegalArgumentException(
-                    "cannot create QName from \"null\" or \"\" String");
+            throw new IllegalArgumentException( "cannot create QName from \"null\" or \"\" String");
         }
 
         // "" local part is valid to preserve compatible behavior with QName 1.0
         if (qNameAsString.length() == 0) {
-            return new QName(
-                XMLConstants.NULL_NS_URI,
-                qNameAsString,
-                XMLConstants.DEFAULT_NS_PREFIX);
+            return new QName(XMLConstants.NULL_NS_URI, qNameAsString,XMLConstants.DEFAULT_NS_PREFIX);
         }
 
         // local part only?
         if (qNameAsString.charAt(0) != '{') {
-            return new QName(
-                XMLConstants.NULL_NS_URI,
-                qNameAsString,
-                XMLConstants.DEFAULT_NS_PREFIX);
+            return new QName( XMLConstants.NULL_NS_URI,qNameAsString, XMLConstants.DEFAULT_NS_PREFIX);
         }
 
         // Namespace URI improperly specified?
@@ -503,10 +458,7 @@ public class QName implements Serializable {
         // Namespace URI and local part specified
         int endOfNamespaceURI = qNameAsString.indexOf('}');
         if (endOfNamespaceURI == -1) {
-            throw new IllegalArgumentException(
-                "cannot create QName from \""
-                    + qNameAsString
-                    + "\", missing closing \"}\"");
+            throw new IllegalArgumentException("cannot create QName from \""  + qNameAsString + "\", missing closing \"}\"");
         }
         return new QName(
             qNameAsString.substring(1, endOfNamespaceURI),
