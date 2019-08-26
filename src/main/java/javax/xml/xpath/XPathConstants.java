@@ -34,8 +34,9 @@ public class XPathConstants {
 
     /**
      * <p>The XPath 1.0 boolean data type.</p>
-     *
-     * <p>Maps to Java {@link Boolean}.</p>
+     *      *
+     *      * <p>Maps to Java {@link Boolean}.</p>
+     *      * doit 这里的 QName 为啥点进去 不是源码里面的呢？
      */
     public static final QName BOOLEAN = new QName("http://www.w3.org/1999/XSL/Transform", "BOOLEAN");
 

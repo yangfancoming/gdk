@@ -50,9 +50,7 @@ public final class XMLConstants {
 
     /**
      * <p>Namespace URI to use to represent that there is no Namespace.</p>
-     *
      * <p>Defined by the Namespace specification to be "".</p>
-     *
      * @see <a href="http://www.w3.org/TR/REC-xml-names/#defaulting">
      * Namespaces in XML, 5.2 Namespace Defaulting</a>
      */
@@ -60,11 +58,8 @@ public final class XMLConstants {
 
     /**
      * <p>Prefix to use to represent the default XML Namespace.</p>
-     *
      * <p>Defined by the XML specification to be "".</p>
-     *
-     * @see <a
-     * href="http://www.w3.org/TR/REC-xml-names/#ns-qualnames">
+     * @see <a href="http://www.w3.org/TR/REC-xml-names/#ns-qualnames">
      * Namespaces in XML, 3. Qualified Names</a>
      */
     public static final String DEFAULT_NS_PREFIX = "";
@@ -79,8 +74,7 @@ public final class XMLConstants {
      * href="http://www.w3.org/TR/REC-xml-names/#ns-qualnames">
      * Namespaces in XML, 3. Qualified Names</a>
      */
-    public static final String XML_NS_URI =
-        "http://www.w3.org/XML/1998/namespace";
+    public static final String XML_NS_URI =  "http://www.w3.org/XML/1998/namespace";
 
     /**
      * <p>The official XML Namespace prefix.</p>

@@ -411,34 +411,24 @@ public class XObject extends Expression implements Serializable, Cloneable
 
 
   /**
-   * Cast result object to a nodelist. Always issues an error.
-   *
+   * Cast result object to a nodelist. Always issues an error. 总是发出错误
    * @return null
-   *
    * @throws javax.xml.transform.TransformerException
    */
-  public NodeIterator nodeset() throws javax.xml.transform.TransformerException
-  {
-
-    error(XPATHErrorResources.ER_CANT_CONVERT_TO_NODELIST,
-          new Object[]{ getTypeString() });  //"Can not convert "+getTypeString()+" to a NodeList!");
-
+  public NodeIterator nodeset() throws javax.xml.transform.TransformerException  {
+      //"Can not convert "+getTypeString()+" to a NodeList!");
+    error(XPATHErrorResources.ER_CANT_CONVERT_TO_NODELIST,  new Object[]{ getTypeString() });
     return null;
   }
 
   /**
    * Cast result object to a nodelist. Always issues an error.
-   *
    * @return null
-   *
    * @throws javax.xml.transform.TransformerException
    */
-  public NodeList nodelist() throws javax.xml.transform.TransformerException
-  {
-
-    error(XPATHErrorResources.ER_CANT_CONVERT_TO_NODELIST,
-          new Object[]{ getTypeString() });  //"Can not convert "+getTypeString()+" to a NodeList!");
-
+  public NodeList nodelist() throws javax.xml.transform.TransformerException {
+      //"Can not convert "+getTypeString()+" to a NodeList!");
+    error(XPATHErrorResources.ER_CANT_CONVERT_TO_NODELIST, new Object[]{ getTypeString() });
     return null;
   }
 
@@ -450,10 +440,7 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  public NodeSetDTM mutableNodeset()
-          throws javax.xml.transform.TransformerException
-  {
-
+  public NodeSetDTM mutableNodeset() throws javax.xml.transform.TransformerException  {
     error(XPATHErrorResources.ER_CANT_CONVERT_TO_MUTABLENODELIST,
           new Object[]{ getTypeString() });  //"Can not convert "+getTypeString()+" to a NodeSetDTM!");
 
@@ -470,14 +457,11 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  public Object castToType(int t, XPathContext support)
-          throws javax.xml.transform.TransformerException
-  {
+  public Object castToType(int t, XPathContext support)  throws javax.xml.transform.TransformerException   {
 
     Object result;
 
-    switch (t)
-    {
+    switch (t) {
     case CLASS_STRING :
       result = str();
       break;
@@ -499,13 +483,9 @@ public class XObject extends Expression implements Serializable, Cloneable
     //      result = rtree(support);
     //      break;
     default :
-      error(XPATHErrorResources.ER_CANT_CONVERT_TO_TYPE,
-            new Object[]{ getTypeString(),
-                          Integer.toString(t) });  //"Can not convert "+getTypeString()+" to a type#"+t);
-
+      error(XPATHErrorResources.ER_CANT_CONVERT_TO_TYPE,  new Object[]{ getTypeString(),Integer.toString(t) });  //"Can not convert "+getTypeString()+" to a type#"+t);
       result = null;
     }
-
     return result;
   }
 
@@ -518,9 +498,7 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  public boolean lessThan(XObject obj2)
-          throws javax.xml.transform.TransformerException
-  {
+  public boolean lessThan(XObject obj2)  throws javax.xml.transform.TransformerException  {
 
     // In order to handle the 'all' semantics of
     // nodeset comparisons, we always call the
@@ -542,9 +520,7 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  public boolean lessThanOrEqual(XObject obj2)
-          throws javax.xml.transform.TransformerException
-  {
+  public boolean lessThanOrEqual(XObject obj2) throws javax.xml.transform.TransformerException  {
 
     // In order to handle the 'all' semantics of
     // nodeset comparisons, we always call the
@@ -566,10 +542,7 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  public boolean greaterThan(XObject obj2)
-          throws javax.xml.transform.TransformerException
-  {
-
+  public boolean greaterThan(XObject obj2)  throws javax.xml.transform.TransformerException  {
     // In order to handle the 'all' semantics of
     // nodeset comparisons, we always call the
     // nodeset function.  Because the arguments
@@ -590,10 +563,7 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  public boolean greaterThanOrEqual(XObject obj2)
-          throws javax.xml.transform.TransformerException
-  {
-
+  public boolean greaterThanOrEqual(XObject obj2) throws javax.xml.transform.TransformerException  {
     // In order to handle the 'all' semantics of
     // nodeset comparisons, we always call the
     // nodeset function.  Because the arguments
@@ -614,8 +584,7 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  public boolean equals(XObject obj2)
-  {
+  public boolean equals(XObject obj2)  {
 
     // In order to handle the 'all' semantics of
     // nodeset comparisons, we always call the
@@ -623,12 +592,10 @@ public class XObject extends Expression implements Serializable, Cloneable
     if (obj2.getType() == XObject.CLASS_NODESET)
       return obj2.equals(this);
 
-    if (null != m_obj)
-    {
+    if (null != m_obj) {
       return m_obj.equals(obj2.m_obj);
     }
-    else
-    {
+    else {
       return obj2.m_obj == null;
     }
   }
@@ -642,16 +609,12 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  public boolean notEquals(XObject obj2)
-          throws javax.xml.transform.TransformerException
-  {
-
+  public boolean notEquals(XObject obj2)  throws javax.xml.transform.TransformerException  {
     // In order to handle the 'all' semantics of
     // nodeset comparisons, we always call the
     // nodeset function.
     if (obj2.getType() == XObject.CLASS_NODESET)
       return obj2.notEquals(this);
-
     return !equals(obj2);
   }
 
@@ -663,9 +626,7 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  protected void error(String msg)
-          throws javax.xml.transform.TransformerException
-  {
+  protected void error(String msg)  throws javax.xml.transform.TransformerException  {
     error(msg, null);
   }
 
@@ -678,9 +639,8 @@ public class XObject extends Expression implements Serializable, Cloneable
    *
    * @throws javax.xml.transform.TransformerException
    */
-  protected void error(String msg, Object[] args)
-          throws javax.xml.transform.TransformerException
-  {
+  protected void error(String msg, Object[] args) throws javax.xml.transform.TransformerException  {
+
 
     String fmsg = XSLMessages.createXPATHMessage(msg, args);
 

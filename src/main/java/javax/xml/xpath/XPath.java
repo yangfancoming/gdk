@@ -207,8 +207,7 @@ public interface XPath {
      * @throws IllegalArgumentException If <code>returnType</code> is not one of the types defined in {@link XPathConstants}.
      * @throws NullPointerException If <code>expression</code> or <code>returnType</code> is <code>null</code>.
      */
-    public Object evaluate(String expression, Object item, QName returnType)
-        throws XPathExpressionException;
+    public Object evaluate(String expression, Object item, QName returnType) throws XPathExpressionException;
 
     /**
      * <p>Evaluate an XPath expression in the specified context and return the result as a <code>String</code>.</p>
@@ -233,8 +232,8 @@ public interface XPath {
      * @throws XPathExpressionException If <code>expression</code> cannot be evaluated.
      * @throws NullPointerException If <code>expression</code> is <code>null</code>.
      */
-    public String evaluate(String expression, Object item)
-        throws XPathExpressionException;
+    public String evaluate(String expression, Object item)  throws XPathExpressionException;
+
 
     /**
      * <p>Evaluate an XPath expression in the context of the specified <code>InputSource</code>

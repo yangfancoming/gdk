@@ -4,12 +4,6 @@
  */
 package com.sun.org.apache.xpath.internal;
 
-import java.io.Serializable;
-
-import javax.xml.transform.ErrorListener;
-import javax.xml.transform.SourceLocator;
-import javax.xml.transform.TransformerException;
-
 import com.sun.org.apache.xalan.internal.res.XSLMessages;
 import com.sun.org.apache.xml.internal.dtm.DTM;
 import com.sun.org.apache.xml.internal.utils.PrefixResolver;
@@ -17,9 +11,13 @@ import com.sun.org.apache.xml.internal.utils.SAXSourceLocator;
 import com.sun.org.apache.xpath.internal.compiler.Compiler;
 import com.sun.org.apache.xpath.internal.compiler.FunctionTable;
 import com.sun.org.apache.xpath.internal.compiler.XPathParser;
-import com.sun.org.apache.xpath.internal.functions.Function;
 import com.sun.org.apache.xpath.internal.objects.XObject;
 import com.sun.org.apache.xpath.internal.res.XPATHErrorResources;
+
+import javax.xml.transform.ErrorListener;
+import javax.xml.transform.SourceLocator;
+import javax.xml.transform.TransformerException;
+import java.io.Serializable;
 
 /**
  * The XPath class wraps an expression object and provides general services
@@ -243,22 +241,16 @@ public class XPath implements Serializable, ExpressionOwner
    *
    * @throws javax.xml.transform.TransformerException if syntax or other error.
    */
-  public XPath(
-          String exprString, SourceLocator locator, PrefixResolver prefixResolver, int type)
-            throws javax.xml.transform.TransformerException
-  {
+  public XPath( String exprString, SourceLocator locator, PrefixResolver prefixResolver, int type)  throws javax.xml.transform.TransformerException {
     this(exprString, locator, prefixResolver, type, null);
   }
 
   /**
    * Construct an XPath object.
-   *
    * @param expr The Expression object.
-   *
    * @throws javax.xml.transform.TransformerException if syntax or other error.
    */
-  public XPath(Expression expr)
-  {
+  public XPath(Expression expr)   {
     this.setExpression(expr);
     initFunctionTable();
   }
@@ -279,14 +271,8 @@ public class XPath implements Serializable, ExpressionOwner
    * @throws javax.xml.transform.TransformerException
    * @xsl.usage experimental
    */
-  public XObject execute(
-          XPathContext xctxt, org.w3c.dom.Node contextNode,
-          PrefixResolver namespaceContext)
-            throws javax.xml.transform.TransformerException
-  {
-    return execute(
-          xctxt, xctxt.getDTMHandleFromNode(contextNode),
-          namespaceContext);
+  public XObject execute(XPathContext xctxt, org.w3c.dom.Node contextNode,PrefixResolver namespaceContext) throws javax.xml.transform.TransformerException  {
+    return execute(xctxt, xctxt.getDTMHandleFromNode(contextNode),namespaceContext);
   }
 
 
@@ -305,15 +291,10 @@ public class XPath implements Serializable, ExpressionOwner
    * @throws javax.xml.transform.TransformerException
    * @xsl.usage experimental
    */
-  public XObject execute(
-          XPathContext xctxt, int contextNode, PrefixResolver namespaceContext)
-            throws javax.xml.transform.TransformerException
-  {
+  public XObject execute(XPathContext xctxt, int contextNode, PrefixResolver namespaceContext) throws javax.xml.transform.TransformerException  {
 
     xctxt.pushNamespaceContext(namespaceContext);
-
     xctxt.pushCurrentNodeAndExpression(contextNode, contextNode);
-
     XObject xobj = null;
 
     try
@@ -324,17 +305,14 @@ public class XPath implements Serializable, ExpressionOwner
     {
       te.setLocator(this.getLocator());
       ErrorListener el = xctxt.getErrorListener();
-      if(null != el) // defensive, should never happen.
-      {
+      if(null != el) { // defensive, should never happen.
         el.error(te);
       }
       else
         throw te;
     }
-    catch (Exception e)
-    {
-      while (e instanceof com.sun.org.apache.xml.internal.utils.WrappedRuntimeException)
-      {
+    catch (Exception e) {
+      while (e instanceof com.sun.org.apache.xml.internal.utils.WrappedRuntimeException) {
         e = ((com.sun.org.apache.xml.internal.utils.WrappedRuntimeException) e).getException();
       }
       // e.printStackTrace();
@@ -342,28 +320,21 @@ public class XPath implements Serializable, ExpressionOwner
       String msg = e.getMessage();
 
       if (msg == null || msg.length() == 0) {
-           msg = XSLMessages.createXPATHMessage(
-               XPATHErrorResources.ER_XPATH_ERROR, null);
-
+           msg = XSLMessages.createXPATHMessage(XPATHErrorResources.ER_XPATH_ERROR, null);
       }
-      TransformerException te = new TransformerException(msg,
-              getLocator(), e);
+      TransformerException te = new TransformerException(msg,getLocator(), e);
       ErrorListener el = xctxt.getErrorListener();
       // te.printStackTrace();
-      if(null != el) // defensive, should never happen.
-      {
+      if(null != el) {// defensive, should never happen.
         el.fatalError(te);
       }
       else
         throw te;
     }
-    finally
-    {
+    finally {
       xctxt.popNamespaceContext();
-
       xctxt.popCurrentNodeAndExpression();
     }
-
     return xobj;
   }
 

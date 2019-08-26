@@ -174,16 +174,13 @@ public class QName implements Serializable {
      * XMLConstants.NULL_NS_URI} value is the preferred coding
      * style.</p>
      *
-     * <p>If the local part is <code>null</code> an
-     * <code>IllegalArgumentException</code> is thrown.
-     * A local part of "" is allowed to preserve
-     * compatible behavior with QName 1.0. </p>
+     * <p>If the local part is <code>null</code> an <code>IllegalArgumentException</code> is thrown.
+     * A local part of "" is allowed to preserve compatible behavior with QName 1.0. </p>
+     * 允许“”的本地部分保留与qname兼容的行为
      *
-     * <p>If the prefix is <code>null</code>, an
-     * <code>IllegalArgumentException</code> is thrown.  Use {@link
-     * javax.xml.XMLConstants#DEFAULT_NS_PREFIX
-     * XMLConstants.DEFAULT_NS_PREFIX} to explicitly indicate that no
-     * prefix is present or the prefix is not relevant.</p>
+     * <p>If the prefix is <code>null</code>, an <code>IllegalArgumentException</code> is thrown.
+     *  Use {@link javax.xml.XMLConstants#DEFAULT_NS_PREFIX
+     * XMLConstants.DEFAULT_NS_PREFIX} to explicitly indicate that no prefix is present or the prefix is not relevant.</p>
      *
      * <p>The Namespace URI is not validated as a
      * <a href="http://www.ietf.org/rfc/rfc2396.txt">URI reference</a>.
@@ -196,11 +193,9 @@ public class QName implements Serializable {
      * @param localPart    local part of the <code>QName</code>
      * @param prefix       prefix of the <code>QName</code>
      *
-     * @throws IllegalArgumentException When <code>localPart</code>
-     *   or <code>prefix</code> is <code>null</code>
+     * @throws IllegalArgumentException When <code>localPart</code>  or <code>prefix</code> is <code>null</code>
      */
     public QName(String namespaceURI, String localPart, String prefix) {
-
         // map null Namespace URI to default
         // to preserve compatibility with QName 1.0
         if (namespaceURI == null) {

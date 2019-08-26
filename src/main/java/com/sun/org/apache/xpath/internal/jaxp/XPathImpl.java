@@ -5,6 +5,7 @@ package com.sun.org.apache.xpath.internal.jaxp;
 
 import javax.xml.namespace.QName;
 import javax.xml.namespace.NamespaceContext;
+import javax.xml.transform.TransformerException;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFunctionResolver;
@@ -168,31 +169,23 @@ public class XPathImpl implements javax.xml.xpath.XPath {
     }
 
 
-    private XObject eval(String expression, Object contextItem)
-        throws javax.xml.transform.TransformerException {
-        com.sun.org.apache.xpath.internal.XPath xpath = new com.sun.org.apache.xpath.internal.XPath( expression,
-            null, prefixResolver, com.sun.org.apache.xpath.internal.XPath.SELECT );
-        com.sun.org.apache.xpath.internal.XPathContext xpathSupport = null;
+    private XObject eval(String expression, Object contextItem)  throws TransformerException {
+        XPath xpath = new XPath( expression,null, prefixResolver, XPath.SELECT );
+        XPathContext xpathSupport;
         if ( functionResolver != null ) {
-            JAXPExtensionsProvider jep = new JAXPExtensionsProvider(
-                    functionResolver, featureSecureProcessing, featureManager );
-            xpathSupport = new com.sun.org.apache.xpath.internal.XPathContext( jep );
+            JAXPExtensionsProvider jep = new JAXPExtensionsProvider(functionResolver, featureSecureProcessing, featureManager );
+            xpathSupport = new XPathContext( jep );
         } else {
-            xpathSupport = new com.sun.org.apache.xpath.internal.XPathContext();
+            xpathSupport = new XPathContext();
         }
-
-        XObject xobj = null;
-
+        XObject xobj;
         xpathSupport.setVarStack(new JAXPVariableStack(variableResolver));
-
         // If item is null, then we will create a a Dummy contextNode
         if ( contextItem instanceof Node ) {
-            xobj = xpath.execute (xpathSupport, (Node)contextItem,
-                    prefixResolver );
+            xobj = xpath.execute (xpathSupport, (Node)contextItem, prefixResolver );
         } else {
             xobj = xpath.execute ( xpathSupport, DTM.NULL, prefixResolver );
         }
-
         return xobj;
     }
 
@@ -227,31 +220,23 @@ public class XPathImpl implements javax.xml.xpath.XPath {
      * @throws IllegalArgumentException If <code>returnType</code> is not one of the types defined in {@link XPathConstants}.
      * @throws NullPointerException If <code>expression</code> or <code>returnType</code> is <code>null</code>.
      */
-    public Object evaluate(String expression, Object item, QName returnType)
-            throws XPathExpressionException {
+    public Object evaluate(String expression, Object item, QName returnType) throws XPathExpressionException {
         if ( expression == null ) {
-            String fmsg = XSLMessages.createXPATHMessage(
-                    XPATHErrorResources.ER_ARG_CANNOT_BE_NULL,
-                    new Object[] {"XPath expression"} );
+            String fmsg = XSLMessages.createXPATHMessage( XPATHErrorResources.ER_ARG_CANNOT_BE_NULL, new Object[] {"XPath expression"} );
             throw new NullPointerException ( fmsg );
         }
         if ( returnType == null ) {
-            String fmsg = XSLMessages.createXPATHMessage(
-                    XPATHErrorResources.ER_ARG_CANNOT_BE_NULL,
-                    new Object[] {"returnType"} );
+            String fmsg = XSLMessages.createXPATHMessage( XPATHErrorResources.ER_ARG_CANNOT_BE_NULL,new Object[] {"returnType"} );
             throw new NullPointerException ( fmsg );
         }
         // Checking if requested returnType is supported. returnType need to
         // be defined in XPathConstants
         if ( !isSupported ( returnType ) ) {
-            String fmsg = XSLMessages.createXPATHMessage(
-                    XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE,
-                    new Object[] { returnType.toString() } );
+            String fmsg = XSLMessages.createXPATHMessage( XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE, new Object[] { returnType.toString() } );
             throw new IllegalArgumentException ( fmsg );
         }
 
         try {
-
             XObject resultObject = eval( expression, item );
             return getResultAsType( resultObject, returnType );
         } catch ( java.lang.NullPointerException npe ) {
@@ -259,7 +244,7 @@ public class XPathImpl implements javax.xml.xpath.XPath {
             // NullPointerException at this stage for some other reason
             // then we have to reurn XPathException
             throw new XPathExpressionException ( npe );
-        } catch ( javax.xml.transform.TransformerException te ) {
+        } catch ( TransformerException te ) {
             Throwable nestedException = te.getException();
             if ( nestedException instanceof javax.xml.xpath.XPathFunctionException ) {
                 throw (javax.xml.xpath.XPathFunctionException)nestedException;
@@ -278,14 +263,12 @@ public class XPathImpl implements javax.xml.xpath.XPath {
              ( returnType.equals( XPathConstants.BOOLEAN ) ) ||
              ( returnType.equals( XPathConstants.NODE ) ) ||
              ( returnType.equals( XPathConstants.NODESET ) )  ) {
-
             return true;
         }
         return false;
      }
 
-    private Object getResultAsType( XObject resultObject, QName returnType )
-        throws javax.xml.transform.TransformerException {
+    private Object getResultAsType( XObject resultObject, QName returnType ) throws TransformerException {
         // XPathConstants.STRING
         if ( returnType.equals( XPathConstants.STRING ) ) {
             return resultObject.str();
@@ -308,9 +291,7 @@ public class XPathImpl implements javax.xml.xpath.XPath {
             //Return the first node, or null
             return ni.nextNode();
         }
-        String fmsg = XSLMessages.createXPATHMessage(
-                XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE,
-                new Object[] { returnType.toString()});
+        String fmsg = XSLMessages.createXPATHMessage( XPATHErrorResources.ER_UNSUPPORTED_RETURN_TYPE, new Object[] { returnType.toString()});
         throw new IllegalArgumentException( fmsg );
     }
 
@@ -371,14 +352,14 @@ public class XPathImpl implements javax.xml.xpath.XPath {
             throw new NullPointerException ( fmsg );
         }
         try {
-            com.sun.org.apache.xpath.internal.XPath xpath = new XPath (expression, null,
-                    prefixResolver, com.sun.org.apache.xpath.internal.XPath.SELECT );
+            XPath xpath = new XPath (expression, null,
+                    prefixResolver, XPath.SELECT );
             // Can have errorListener
             XPathExpressionImpl ximpl = new XPathExpressionImpl (xpath,
                     prefixResolver, functionResolver, variableResolver,
                     featureSecureProcessing, useServiceMechanism, featureManager );
             return ximpl;
-        } catch ( javax.xml.transform.TransformerException te ) {
+        } catch ( TransformerException te ) {
             throw new XPathExpressionException ( te ) ;
         }
     }
@@ -453,7 +434,7 @@ public class XPathImpl implements javax.xml.xpath.XPath {
             throw new XPathExpressionException ( e );
         } catch( IOException e ) {
             throw new XPathExpressionException ( e );
-        } catch ( javax.xml.transform.TransformerException te ) {
+        } catch ( TransformerException te ) {
             Throwable nestedException = te.getException();
             if ( nestedException instanceof javax.xml.xpath.XPathFunctionException ) {
                 throw (javax.xml.xpath.XPathFunctionException)nestedException;
