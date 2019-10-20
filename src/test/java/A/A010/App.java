@@ -18,6 +18,8 @@ public class App {
 
     SortedMap<String,Object> sortedMap = new TreeMap<>();
 
+    List list = new ArrayList();
+
     @Before
     public void before() {
     }

@@ -94,8 +94,7 @@ public class DriverManager {
 
 
     /**
-     * Load the initial JDBC drivers by checking the System property
-     * jdbc.properties and then use the {@code ServiceLoader} mechanism
+     * Load the initial JDBC drivers by checking the System property jdbc.properties and then use the {@code ServiceLoader} mechanism
      */
     static {
         loadInitialDrivers();
@@ -567,11 +566,7 @@ public class DriverManager {
     private static void loadInitialDrivers() {
         String drivers;
         try {
-            drivers = AccessController.doPrivileged(new PrivilegedAction<String>() {
-                public String run() {
-                    return System.getProperty("jdbc.drivers");
-                }
-            });
+            drivers = AccessController.doPrivileged((PrivilegedAction<String>) ()->System.getProperty("jdbc.drivers"));
         } catch (Exception ex) {
             drivers = null;
         }
@@ -579,34 +574,34 @@ public class DriverManager {
         // Get all the drivers through the classloader
         // exposed as a java.sql.Driver.class service.
         // ServiceLoader.load() replaces the sun.misc.Providers()
+        AccessController.doPrivileged((PrivilegedAction<Void>) ()->{
+            /**
+             * 其实时从META-INF文件夹中读取现实Driver接口的实现类的，在这里，其实就是读取mysql-connection-java的META-INF/services/java.sql.Driver 文件。
+             * 此处的java.sql.Driver文件名是必要的，不能写成别的。就是接口的全路径。
+            */
+            ServiceLoader<Driver> loadedDrivers = ServiceLoader.load(Driver.class);
+            Iterator<Driver> driversIterator = loadedDrivers.iterator();
 
-        AccessController.doPrivileged(new PrivilegedAction<Void>() {
-            public Void run() {
-
-                ServiceLoader<Driver> loadedDrivers = ServiceLoader.load(Driver.class);
-                Iterator<Driver> driversIterator = loadedDrivers.iterator();
-
-                /* Load these drivers, so that they can be instantiated.
-                 * It may be the case that the driver class may not be there
-                 * i.e. there may be a packaged driver with the service class
-                 * as implementation of java.sql.Driver but the actual class
-                 * may be missing. In that case a java.util.ServiceConfigurationError
-                 * will be thrown at runtime by the VM trying to locate
-                 * and load the service.
-                 *
-                 * Adding a try catch block to catch those runtime errors
-                 * if driver not available in classpath but it's
-                 * packaged as service and that service is there in classpath.
-                 */
-                try{
-                    while(driversIterator.hasNext()) {
-                        driversIterator.next();
-                    }
-                } catch(Throwable t) {
-                // Do nothing
+            /* Load these drivers, so that they can be instantiated.
+             * It may be the case that the driver class may not be there
+             * i.e. there may be a packaged driver with the service class
+             * as implementation of java.sql.Driver but the actual class
+             * may be missing. In that case a java.util.ServiceConfigurationError
+             * will be thrown at runtime by the VM trying to locate
+             * and load the service.
+             *
+             * Adding a try catch block to catch those runtime errors
+             * if driver not available in classpath but it's
+             * packaged as service and that service is there in classpath.
+             */
+            try{
+                while(driversIterator.hasNext()) {
+                    driversIterator.next();
                 }
-                return null;
+            } catch(Throwable t) {
+            // Do nothing
             }
+            return null;
         });
 
         println("DriverManager.initialize: jdbc.drivers = " + drivers);
