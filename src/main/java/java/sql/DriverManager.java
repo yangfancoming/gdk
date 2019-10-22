@@ -556,10 +556,8 @@ public class DriverManager {
             } catch (Exception ex) {
                 result = false;
             }
-
              result = ( aClass == driver.getClass() ) ? true : false;
         }
-
         return result;
     }
 
@@ -596,6 +594,7 @@ public class DriverManager {
              */
             try{
                 while(driversIterator.hasNext()) {
+                    //这个调用其实是调用了ServiceLoadr中的nextService()
                     driversIterator.next();
                 }
             } catch(Throwable t) {

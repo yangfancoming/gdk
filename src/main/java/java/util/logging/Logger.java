@@ -212,7 +212,6 @@ import sun.reflect.Reflection;
  * output, subclasses need only override the log(LogRecord) method.
  * All the other logging methods are implemented as calls on this
  * log(LogRecord) method.
- *
  * @since 1.4
  */
 public class Logger {
@@ -250,13 +249,11 @@ public class Logger {
 
     // This instance indicates that no resource bundle has been specified yet,
     // and it will be shared by all loggers which have no resource bundle.
-    private static final LoggerBundle NO_RESOURCE_BUNDLE =
-            new LoggerBundle(null, null);
+    private static final LoggerBundle NO_RESOURCE_BUNDLE =  new LoggerBundle(null, null);
 
     private volatile LogManager manager;
     private String name;
-    private final CopyOnWriteArrayList<Handler> handlers =
-        new CopyOnWriteArrayList<>();
+    private final CopyOnWriteArrayList<Handler> handlers =  new CopyOnWriteArrayList<>();
     private volatile LoggerBundle loggerBundle = NO_RESOURCE_BUNDLE;
     private volatile boolean useParentHandlers = true;
     private volatile Filter filter;
@@ -281,14 +278,12 @@ public class Logger {
 
     /**
      * GLOBAL_LOGGER_NAME is a name for the global logger.
-     *
      * @since 1.6
      */
     public static final String GLOBAL_LOGGER_NAME = "global";
 
     /**
      * Return global logger object with the name Logger.GLOBAL_LOGGER_NAME.
-     *
      * @return global logger object
      * @since 1.7
      */
@@ -355,10 +350,8 @@ public class Logger {
 
     /**
      * Protected method to construct a logger for a named subsystem.
-     * <p>
      * The logger will be initially configured with a null Level
      * and with useParentHandlers set to true.
-     *
      * @param   name    A name for the logger.  This should
      *                          be a dot-separated name and should normally
      *                          be based on the package name or class name
@@ -383,18 +376,14 @@ public class Logger {
     }
 
     private void setCallersClassLoaderRef(Class<?> caller) {
-        ClassLoader callersClassLoader = ((caller != null)
-                                         ? caller.getClassLoader()
-                                         : null);
+        ClassLoader callersClassLoader = ((caller != null) ? caller.getClassLoader() : null);
         if (callersClassLoader != null) {
             this.callersClassLoaderRef = new WeakReference<>(callersClassLoader);
         }
     }
 
     private ClassLoader getCallersClassLoader() {
-        return (callersClassLoaderRef != null)
-                ? callersClassLoaderRef.get()
-                : null;
+        return (callersClassLoaderRef != null) ? callersClassLoaderRef.get(): null;
     }
 
     // This constructor is used only to create the global Logger.
@@ -434,12 +423,7 @@ public class Logger {
     private static class SystemLoggerHelper {
         static boolean disableCallerCheck = getBooleanProperty("sun.util.logging.disableCallerCheck");
         private static boolean getBooleanProperty(final String key) {
-            String s = AccessController.doPrivileged(new PrivilegedAction<String>() {
-                @Override
-                public String run() {
-                    return System.getProperty(key);
-                }
-            });
+            String s = AccessController.doPrivileged((PrivilegedAction<String>) ()->System.getProperty(key));
             return Boolean.valueOf(s);
         }
     }
@@ -730,22 +714,14 @@ public class Logger {
 
         Logger logger = this;
         while (logger != null) {
-            final Handler[] loggerHandlers = isSystemLogger
-                ? logger.accessCheckedHandlers()
-                : logger.getHandlers();
-
+            final Handler[] loggerHandlers = isSystemLogger ? logger.accessCheckedHandlers() : logger.getHandlers();
             for (Handler handler : loggerHandlers) {
                 handler.publish(record);
             }
-
-            final boolean useParentHdls = isSystemLogger
-                ? logger.useParentHandlers
-                : logger.getUseParentHandlers();
-
+            final boolean useParentHdls = isSystemLogger ? logger.useParentHandlers : logger.getUseParentHandlers();
             if (!useParentHdls) {
                 break;
             }
-
             logger = isSystemLogger ? logger.parent : logger.getParent();
         }
     }
@@ -1197,8 +1173,7 @@ public class Logger {
      *      java.lang.Object...)} instead.
      */
     @Deprecated
-    public void logrb(Level level, String sourceClass, String sourceMethod,
-                                String bundleName, String msg, Object params[]) {
+    public void logrb(Level level, String sourceClass, String sourceMethod,String bundleName, String msg, Object params[]) {
         if (!isLoggable(level)) {
             return;
         }
@@ -1230,8 +1205,7 @@ public class Logger {
      * @param   params  Parameters to the message (optional, may be none).
      * @since 1.8
      */
-    public void logrb(Level level, String sourceClass, String sourceMethod,
-                      ResourceBundle bundle, String msg, Object... params) {
+    public void logrb(Level level, String sourceClass, String sourceMethod, ResourceBundle bundle, String msg, Object... params) {
         if (!isLoggable(level)) {
             return;
         }
@@ -1273,8 +1247,7 @@ public class Logger {
      *     java.lang.Throwable)} instead.
      */
     @Deprecated
-    public void logrb(Level level, String sourceClass, String sourceMethod,
-                                        String bundleName, String msg, Throwable thrown) {
+    public void logrb(Level level, String sourceClass, String sourceMethod,String bundleName, String msg, Throwable thrown) {
         if (!isLoggable(level)) {
             return;
         }

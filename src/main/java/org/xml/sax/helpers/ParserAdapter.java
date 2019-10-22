@@ -1,27 +1,4 @@
-/*
- * Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+
 
 // ParserAdapter.java - adapt a SAX1 Parser to a SAX2 XMLReader.
 // http://www.saxproject.org

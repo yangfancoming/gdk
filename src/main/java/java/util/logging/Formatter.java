@@ -36,7 +36,6 @@ package java.util.logging;
  * Some formatters (such as the XMLFormatter) need to wrap head
  * and tail strings around a set of formatted records. The getHeader
  * and getTail methods can be used to obtain these strings.
- *
  * @since 1.4
  */
 
@@ -133,8 +132,7 @@ public abstract class Formatter {
             // Pattern.compile("\\{\\d").matcher(format).find())
             // However the cost is 14% higher, so we cheaply check for
             // 1 of the first 4 parameters
-            if (format.indexOf("{0") >= 0 || format.indexOf("{1") >=0 ||
-                        format.indexOf("{2") >=0|| format.indexOf("{3") >=0) {
+            if (format.indexOf("{0") >= 0 || format.indexOf("{1") >=0 ||  format.indexOf("{2") >=0|| format.indexOf("{3") >=0) {
                 return java.text.MessageFormat.format(format, parameters);
             }
             return format;

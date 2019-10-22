@@ -199,8 +199,6 @@ public interface ResultSet extends Wrapper, AutoCloseable {
      *<p>
      * Calling the method <code>close</code> on a <code>ResultSet</code>
      * object that is already closed is a no-op.
-     *
-     *
      * @exception SQLException if a database access error occurs
      */
     void close() throws SQLException;
@@ -212,7 +210,6 @@ public interface ResultSet extends Wrapper, AutoCloseable {
      * on a column to try to read its value and then call
      * the method <code>wasNull</code> to see if the value read was
      * SQL <code>NULL</code>.
-     *
      * @return <code>true</code> if the last column value read was SQL
      *         <code>NULL</code> and <code>false</code> otherwise
      * @exception SQLException if a database access error occurs or this method is
@@ -261,13 +258,11 @@ public interface ResultSet extends Wrapper, AutoCloseable {
      * Retrieves the value of the designated column in the current row
      * of this <code>ResultSet</code> object as
      * a <code>byte</code> in the Java programming language.
-     *
      * @param columnIndex the first column is 1, the second is 2, ...
      * @return the column value; if the value is SQL <code>NULL</code>, the
      * value returned is <code>0</code>
      * @exception SQLException if the columnIndex is not valid;
-     * if a database access error occurs or this method is
-     *            called on a closed result set
+     * if a database access error occurs or this method is  called on a closed result set
      */
     byte getByte(int columnIndex) throws SQLException;
 
@@ -294,8 +289,7 @@ public interface ResultSet extends Wrapper, AutoCloseable {
      * @return the column value; if the value is SQL <code>NULL</code>, the
      * value returned is <code>0</code>
      * @exception SQLException if the columnIndex is not valid;
-     * if a database access error occurs or this method is
-     *            called on a closed result set
+     * if a database access error occurs or this method is  called on a closed result set
      */
     int getInt(int columnIndex) throws SQLException;
 
@@ -322,8 +316,7 @@ public interface ResultSet extends Wrapper, AutoCloseable {
      * @return the column value; if the value is SQL <code>NULL</code>, the
      * value returned is <code>0</code>
      * @exception SQLException if the columnIndex is not valid;
-     * if a database access error occurs or this method is
-     *            called on a closed result set
+     * if a database access error occurs or this method is called on a closed result set
      */
     float getFloat(int columnIndex) throws SQLException;
 

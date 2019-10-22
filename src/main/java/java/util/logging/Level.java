@@ -1,27 +1,4 @@
-/*
- * Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+
 
 package java.util.logging;
 import java.util.ArrayList;
@@ -226,7 +203,6 @@ public class Level implements java.io.Serializable {
     /**
      * Return the level's localization resource bundle name, or
      * null if no localization bundle is defined.
-     *
      * @return localization resource bundle name
      */
     public String getResourceBundleName() {
@@ -235,7 +211,6 @@ public class Level implements java.io.Serializable {
 
     /**
      * Return the non-localized string name of the Level.
-     *
      * @return non-localized name
      */
     public String getName() {
@@ -245,10 +220,7 @@ public class Level implements java.io.Serializable {
     /**
      * Return the localized string name of the Level, for
      * the current default locale.
-     * <p>
-     * If no localization information is available, the
-     * non-localized name is returned.
-     *
+     * If no localization information is available, the non-localized name is returned.
      * @return localized name
      */
     public String getLocalizedName() {

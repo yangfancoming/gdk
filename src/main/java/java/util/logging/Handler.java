@@ -1,27 +1,4 @@
-/*
- * Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+
 
 
 package java.util.logging;
@@ -40,8 +17,6 @@ import java.io.UnsupportedEncodingException;
  * default values for the <tt>Handler</tt>'s <tt>Filter</tt>, <tt>Formatter</tt>,
  * and <tt>Level</tt>.  See the specific documentation for each concrete
  * <tt>Handler</tt> class.
- *
- *
  * @since 1.4
  */
 
@@ -146,8 +121,7 @@ public abstract class Handler {
      * @exception  UnsupportedEncodingException if the named encoding is
      *          not supported.
      */
-    public synchronized void setEncoding(String encoding)
-                        throws SecurityException, java.io.UnsupportedEncodingException {
+    public synchronized void setEncoding(String encoding)throws SecurityException, java.io.UnsupportedEncodingException {
         checkPermission();
         if (encoding != null) {
             try {

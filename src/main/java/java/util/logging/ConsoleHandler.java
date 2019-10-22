@@ -1,27 +1,4 @@
-/*
- * Copyright (c) 2000, 2013, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+
 
 
 package java.util.logging;
@@ -90,10 +67,8 @@ public class ConsoleHandler extends StreamHandler {
 
     /**
      * Create a <tt>ConsoleHandler</tt> for <tt>System.err</tt>.
-     * <p>
      * The <tt>ConsoleHandler</tt> is configured based on
      * <tt>LogManager</tt> properties (or their default values).
-     *
      */
     public ConsoleHandler() {
         sealed = false;
@@ -104,12 +79,9 @@ public class ConsoleHandler extends StreamHandler {
 
     /**
      * Publish a <tt>LogRecord</tt>.
-     * <p>
      * The logging request was made initially to a <tt>Logger</tt> object,
      * which initialized the <tt>LogRecord</tt> and forwarded it here.
-     * <p>
-     * @param  record  description of the log event. A null record is
-     *                 silently ignored and is not published
+     * @param  record  description of the log event. A null record is silently ignored and is not published
      */
     @Override
     public void publish(LogRecord record) {
