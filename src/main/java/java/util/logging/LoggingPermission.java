@@ -1,47 +1,18 @@
-/*
- * Copyright (c) 2000, 2003, Oracle and/or its affiliates. All rights reserved.
- * ORACLE PROPRIETARY/CONFIDENTIAL. Use is subject to license terms.
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- *
- */
+
 
 
 package java.util.logging;
-
-import java.security.*;
 
 /**
  * The permission which the SecurityManager will check when code
  * that is running with a SecurityManager calls one of the logging
  * control methods (such as Logger.setLevel).
- * <p>
  * Currently there is only one named LoggingPermission.  This is "control"
  * and it grants the ability to control the logging configuration, for
  * example by adding or removing Handlers, by adding or removing Filters,
  * or by changing logging levels.
- * <p>
  * Programmers do not normally create LoggingPermission objects directly.
- * Instead they are created by the security policy code based on reading
- * the security policy file.
- *
+ * Instead they are created by the security policy code based on reading the security policy file.
  *
  * @since 1.4
  * @see java.security.BasicPermission
