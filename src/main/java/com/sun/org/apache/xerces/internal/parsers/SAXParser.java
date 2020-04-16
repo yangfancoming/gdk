@@ -39,8 +39,7 @@ import org.xml.sax.SAXNotSupportedException;
  *
  * @version $Id: SAXParser.java,v 1.7 2010-11-01 04:40:09 joehw Exp $
  */
-public class SAXParser
-    extends AbstractSAXParser {
+public class SAXParser  extends AbstractSAXParser {
 
     //
     // Constants

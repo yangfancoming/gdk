@@ -230,14 +230,12 @@ public class Proxy implements java.io.Serializable {
     private static final long serialVersionUID = -2222568056686623797L;
 
     /** parameter types of a proxy class constructor */
-    private static final Class<?>[] constructorParams =
-        { InvocationHandler.class };
+    private static final Class<?>[] constructorParams =  { InvocationHandler.class };
 
     /**
      * a cache of proxy classes
      */
-    private static final WeakCache<ClassLoader, Class<?>[], Class<?>>
-        proxyClassCache = new WeakCache<>(new KeyFactory(), new ProxyClassFactory());
+    private static final WeakCache<ClassLoader, Class<?>[], Class<?>> proxyClassCache = new WeakCache<>(new KeyFactory(), new ProxyClassFactory());
 
     /**
      * the invocation handler for this proxy instance.
@@ -407,12 +405,10 @@ public class Proxy implements java.io.Serializable {
      * Generate a proxy class.  Must call the checkProxyAccess method
      * to perform permission checks before calling this.
      */
-    private static Class<?> getProxyClass0(ClassLoader loader,
-                                           Class<?>... interfaces) {
+    private static Class<?> getProxyClass0(ClassLoader loader,Class<?>... interfaces) {
         if (interfaces.length > 65535) {
             throw new IllegalArgumentException("interface limit exceeded");
         }
-
         // If the proxy class defined by the given loader implementing
         // the given interfaces exists, this will simply return the cached copy;
         // otherwise, it will create the proxy class via the ProxyClassFactory
@@ -636,11 +632,9 @@ public class Proxy implements java.io.Serializable {
             /*
              * Generate the specified proxy class.
              */
-            byte[] proxyClassFile = ProxyGenerator.generateProxyClass(
-                proxyName, interfaces, accessFlags);
+            byte[] proxyClassFile = ProxyGenerator.generateProxyClass(proxyName, interfaces, accessFlags);
             try {
-                return defineClass0(loader, proxyName,
-                                    proxyClassFile, 0, proxyClassFile.length);
+                return defineClass0(loader, proxyName, proxyClassFile, 0, proxyClassFile.length);
             } catch (ClassFormatError e) {
                 /*
                  * A ClassFormatError here means that (barring bugs in the
@@ -700,24 +694,17 @@ public class Proxy implements java.io.Serializable {
      *          {@code null}
      */
     @CallerSensitive
-    public static Object newProxyInstance(ClassLoader loader,
-                                          Class<?>[] interfaces,
-                                          InvocationHandler h)
-        throws IllegalArgumentException
-    {
+    public static Object newProxyInstance(ClassLoader loader,Class<?>[] interfaces,InvocationHandler h) throws IllegalArgumentException {
         Objects.requireNonNull(h);
-
         final Class<?>[] intfs = interfaces.clone();
         final SecurityManager sm = System.getSecurityManager();
         if (sm != null) {
             checkProxyAccess(Reflection.getCallerClass(), loader, intfs);
         }
-
         /*
          * Look up or generate the designated proxy class.
          */
         Class<?> cl = getProxyClass0(loader, intfs);
-
         /*
          * Invoke its constructor with the designated invocation handler.
          */
@@ -725,17 +712,16 @@ public class Proxy implements java.io.Serializable {
             if (sm != null) {
                 checkNewProxyPermission(Reflection.getCallerClass(), cl);
             }
-
+            // 调用代理对象的构造方法（也就是$Proxy0(InvocationHandler h)）
             final Constructor<?> cons = cl.getConstructor(constructorParams);
             final InvocationHandler ih = h;
             if (!Modifier.isPublic(cl.getModifiers())) {
-                AccessController.doPrivileged(new PrivilegedAction<Void>() {
-                    public Void run() {
-                        cons.setAccessible(true);
-                        return null;
-                    }
+                AccessController.doPrivileged((PrivilegedAction<Void>) ()->{
+                    cons.setAccessible(true);
+                    return null;
                 });
             }
+            // 生成代理类的实例并把MyInvocationHandler的实例传给它的构造方法
             return cons.newInstance(new Object[]{h});
         } catch (IllegalAccessException|InstantiationException e) {
             throw new InternalError(e.toString(), e);

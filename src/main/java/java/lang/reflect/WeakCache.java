@@ -56,13 +56,10 @@ import java.util.function.Supplier;
  */
 final class WeakCache<K, P, V> {
 
-    private final ReferenceQueue<K> refQueue
-        = new ReferenceQueue<>();
+    private final ReferenceQueue<K> refQueue  = new ReferenceQueue<>();
     // the key type is Object for supporting null key
-    private final ConcurrentMap<Object, ConcurrentMap<Object, Supplier<V>>> map
-        = new ConcurrentHashMap<>();
-    private final ConcurrentMap<Supplier<V>, Boolean> reverseMap
-        = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Object, ConcurrentMap<Object, Supplier<V>>> map  = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Supplier<V>, Boolean> reverseMap  = new ConcurrentHashMap<>();
     private final BiFunction<K, P, ?> subKeyFactory;
     private final BiFunction<K, P, V> valueFactory;
 
@@ -76,8 +73,7 @@ final class WeakCache<K, P, V> {
      * @throws NullPointerException if {@code subKeyFactory} or
      *                              {@code valueFactory} is null.
      */
-    public WeakCache(BiFunction<K, P, ?> subKeyFactory,
-                     BiFunction<K, P, V> valueFactory) {
+    public WeakCache(BiFunction<K, P, ?> subKeyFactory,BiFunction<K, P, V> valueFactory) {
         this.subKeyFactory = Objects.requireNonNull(subKeyFactory);
         this.valueFactory = Objects.requireNonNull(valueFactory);
     }
@@ -87,7 +83,6 @@ final class WeakCache<K, P, V> {
      * {@code subKeyFactory} function and optionally evaluates
      * {@code valueFactory} function if there is no entry in the cache for given
      * pair of (key, subKey) or the entry has already been cleared.
-     *
      * @param key       possibly null key
      * @param parameter parameter used together with key to create sub-key and
      *                  value (should not be null)
@@ -99,17 +94,12 @@ final class WeakCache<K, P, V> {
      */
     public V get(K key, P parameter) {
         Objects.requireNonNull(parameter);
-
         expungeStaleEntries();
-
         Object cacheKey = CacheKey.valueOf(key, refQueue);
-
         // lazily install the 2nd level valuesMap for the particular cacheKey
         ConcurrentMap<Object, Supplier<V>> valuesMap = map.get(cacheKey);
         if (valuesMap == null) {
-            ConcurrentMap<Object, Supplier<V>> oldValuesMap
-                = map.putIfAbsent(cacheKey,
-                                  valuesMap = new ConcurrentHashMap<>());
+            ConcurrentMap<Object, Supplier<V>> oldValuesMap = map.putIfAbsent(cacheKey, valuesMap = new ConcurrentHashMap<>());
             if (oldValuesMap != null) {
                 valuesMap = oldValuesMap;
             }

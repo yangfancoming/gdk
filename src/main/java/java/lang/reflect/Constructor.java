@@ -38,24 +38,18 @@ import java.lang.annotation.Annotation;
 import java.lang.annotation.AnnotationFormatError;
 
 /**
- * {@code Constructor} provides information about, and access to, a single
- * constructor for a class.
- *
+ * {@code Constructor} provides information about, and access to, a single constructor for a class.
  * <p>{@code Constructor} permits widening conversions to occur when matching the
  * actual parameters to newInstance() with the underlying
  * constructor's formal parameters, but throws an
  * {@code IllegalArgumentException} if a narrowing conversion would occur.
- *
  * @param <T> the class in which the constructor is declared
- *
  * @see Member
  * @see java.lang.Class
  * @see java.lang.Class#getConstructors()
  * @see java.lang.Class#getConstructor(Class[])
  * @see java.lang.Class#getDeclaredConstructors()
- *
- * @author      Kenneth Russell
- * @author      Nakul Saraiya
+
  */
 public final class Constructor<T> extends Executable {
     private Class<T>            clazz;
